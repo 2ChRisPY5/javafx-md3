@@ -1,0 +1,37 @@
+plugins {
+	id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+subprojects {
+	apply plugin: 'java-library'
+	apply plugin: 'org.openjfx.javafxplugin'
+	apply plugin: 'eclipse'
+
+	group 'com.github.chrispy.javafx.md3'
+	version '1.0.0-SNAPSHOT'
+
+	repositories {
+		mavenCentral()
+	}
+
+	javafx {
+		version = 19
+	}
+
+	compileJava {
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
+	}
+
+	eclipse {
+		classpath {
+			file {
+				whenMerged {
+					entries.findAll { it.properties.kind.equals('lib') || (it.properties.kind.equals('src') && it.properties.path.startsWith('/')) }.each {
+						it.entryAttributes['module'] = 'true'
+					}
+				}
+			}
+		}
+	}
+}

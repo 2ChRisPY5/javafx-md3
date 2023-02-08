@@ -1,0 +1,7 @@
+javafx {
+	modules = ['javafx.fxml', 'javafx.controls']
+}
+
+dependencies {
+	api project(':base')
+}

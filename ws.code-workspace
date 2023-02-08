@@ -1,0 +1,59 @@
+{
+	"folders": [
+		{
+			"path": "./"
+		}
+	],
+	"settings": {
+		"editor.insertSpaces": false,
+		"editor.detectIndentation": false,
+		"editor.formatOnSave": true,
+		"files.insertFinalNewline": false,
+		"files.trimTrailingWhitespace": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll": true,
+			"source.organizeImports": true
+		},
+		"files.exclude": {
+			".gradle": true,
+			"gradle": true,
+			"gradlew*": true,
+			"**/.settings": true,
+			"**/.project": true,
+			"**/.classpath": true,
+			"**/bin": true,
+			"**/build": true
+		}
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"options": {
+			"env": {
+				"JAVA_HOME": "D:\\JWorld\\JDK\\J2SE\\openjdk17.0.1_12.64"
+			}
+		},
+		"tasks": [
+			{
+				"label": "Run",
+				"type": "shell",
+				"command": "./gradlew :test-app:run",
+				"group": "build"
+			},
+			{
+				"label": "Eclipse",
+				"command": "./gradlew eclipse",
+				"type": "shell",
+				"group": "build"
+			},
+			{
+				"label": "Build",
+				"command": "./gradlew build",
+				"type": "shell",
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				}
+			}
+		]
+	}
+}

@@ -1,0 +1,51 @@
+/* continer */
+.md-container {
+	-fx-font-size: 16px;
+}
+
+/* text input */
+.text-input {
+	-fx-background-color: transparent;
+	-fx-background-insets: 0;
+	-fx-background-radius: 0;
+	-fx-text-fill: rgba(0, 0, 0, 0.87);
+}
+
+/* label */
+.label {
+	-fx-text-fill: rgba(0, 0, 0, 0.6);
+}
+
+.label:not-empty {
+	-fx-font-size: 14px;
+}
+
+.label:not-empty:focus {
+	-fx-text-fill: #ed872d;
+}
+
+/* style for fill appearence */
+.md-container.fill {
+	-fx-background-color: #f5f5f5;
+	-fx-background-radius: 4px 4px 0px 0px;
+
+	-fx-border-style: solid;
+	-fx-border-width: 0 0 1px 0;
+	-fx-border-color: #939393;
+}
+
+.md-container.fill:hover {
+	-fx-background-color: #dcdcdc;
+	-fx-border-color: #626262;
+}
+
+.md-container.fill:focus {
+	-fx-background-color: #dcdcdc;
+	-fx-border-color: #ed872d;
+	-fx-border-width: 0 0 2px 0;
+}
+
+.md-container.fill:disabled {
+	-fx-background-color: rgb(250, 250, 250);
+	-fx-border-color: #dcdcdc;
+}

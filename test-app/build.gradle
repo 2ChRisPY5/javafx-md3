@@ -1,0 +1,17 @@
+plugins {
+	id 'application'
+}
+
+javafx {
+	modules = ['javafx.fxml', 'javafx.controls']
+}
+
+dependencies {
+	implementation project(':base')
+	implementation project(':input')
+}
+
+application {
+	mainModule = 'chrispy.javafx.md3_app'
+	mainClass = 'com.github.chrispy.javafx.md3.app.Main'
+}
