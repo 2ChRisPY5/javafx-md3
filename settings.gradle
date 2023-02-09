@@ -9,4 +9,4 @@
  */
 
 rootProject.name = 'javafx-md3'
-include 'base', 'input', 'test-app'
+include 'base', 'icon', 'input', 'test-app'
