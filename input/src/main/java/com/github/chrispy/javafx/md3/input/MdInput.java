@@ -6,7 +6,8 @@ import java.util.Objects;
 import com.github.chrispy.javafx.md3.base.MdPseudoClass;
 import com.github.chrispy.javafx.md3.base.fn.UnsafeRunnable;
 import com.github.chrispy.javafx.md3.base.utils.StringUtils;
-import com.github.chrispy.javafx.md3.input.pwd.PasswordFilter;
+import com.github.chrispy.javafx.md3.input.formatter.NumberFilter;
+import com.github.chrispy.javafx.md3.input.formatter.PasswordFilter;
 import com.github.chrispy.javafx.md3.input.types.Design;
 import com.github.chrispy.javafx.md3.input.types.Input;
 
@@ -16,15 +17,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
+import javafx.util.converter.NumberStringConverter;
 
 /**
  * Material Design Input Field
  *
  * @author 2ChRisPY5
  */
-public class MdInput extends AnchorPane
+public class MdInput extends GridPane
 {
 	private static final URL FXML = MdInput.class.getResource("/md-input.fxml");
 
@@ -42,18 +45,45 @@ public class MdInput extends AnchorPane
 	 * Constructor
 	 *
 	 * @param label the label text
+	 * @param input the {@link Input} type
+	 * @param design the {@link Design}
 	 */
-	public MdInput(@NamedArg(value = "design", defaultValue = "fill") final String design,
+	public MdInput(@NamedArg(value = "label") final String label,
 		@NamedArg(value = "type", defaultValue = "text") final String input,
-		@NamedArg(value = "label") final String label)
+		@NamedArg(value = "design", defaultValue = "fill") final String design)
 	{
-		this(Design.valueOf(design.toUpperCase()), Input.valueOf(input.toUpperCase()), label);
+		this(label, Input.valueOf(input.toUpperCase()), Design.valueOf(design.toUpperCase()));
+	}
+
+	/**
+	 * Input = TEXT; Design = FILL
+	 *
+	 * @param label the label text
+	 */
+	public MdInput(final String label)
+	{
+		this(label, Input.TEXT);
+	}
+
+	/**
+	 * Design = FILL
+	 *
+	 * @param label the label text
+	 * @param input the {@link Input} type
+	 */
+	public MdInput(final String label, final Input input)
+	{
+		this(label, input, Design.FILL);
 	}
 
 	/**
 	 * Constructor
+	 *
+	 * @param label the label text
+	 * @param input the {@link Input} type
+	 * @param design the {@link Design}
 	 */
-	public MdInput(final Design design, final Input input, final String label)
+	public MdInput(final String label, final Input input, final Design design)
 	{
 		this.design = design;
 		this.input = input;
@@ -66,6 +96,7 @@ public class MdInput extends AnchorPane
 
 		// setup stuff
 		setLabel(label);
+		this.transition.setNode(this.label);
 		initialize();
 	}
 
@@ -170,9 +201,8 @@ public class MdInput extends AnchorPane
 	 */
 	private void initialize()
 	{
-		// initialize styling
-		this.transition.setNode(this.label);
-		this.design.applyStyle(this);
+		initDesign();
+		initTypeSpecifics();
 
 		// register focus changed
 		this.textField.focusedProperty().addListener((obs, old, nev) -> {
@@ -196,6 +226,32 @@ public class MdInput extends AnchorPane
 	}
 
 	/**
+	 * Initialize input type specific stuff.
+	 */
+	private void initTypeSpecifics()
+	{
+		switch(this.input)
+		{
+			case PASSWORD:
+				this.textField.setTextFormatter(new TextFormatter<>(new PasswordFilter()));
+				break;
+			case NUMBER:
+				this.textField.setTextFormatter(new TextFormatter<>(new NumberStringConverter(), null, NumberFilter.INSTANCE));
+				break;
+			default:
+				break;
+		}
+	}
+
+	/**
+	 * Initialize styling.
+	 */
+	private void initDesign()
+	{
+		this.design.applyStyle(this);
+	}
+
+	/**
 	 * Moves the label up if a text exists; else move to middle
 	 */
 	private void handleNotBlank()
@@ -204,7 +260,7 @@ public class MdInput extends AnchorPane
 		{
 			// shift to center
 			MdPseudoClass.NOT_EMPTY.remove(this.label);
-			this.transition.setToY(12D);
+			this.transition.setToY(14D);
 		}
 		else
 		{

@@ -1,4 +1,4 @@
-package com.github.chrispy.javafx.md3.input.pwd;
+package com.github.chrispy.javafx.md3.input.formatter;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -32,7 +32,7 @@ public class PasswordFilter implements UnaryOperator<Change>
 
 		// delete text part
 		final var text = change.getText();
-		if(StringUtils.nullOrBlank(text))
+		if(StringUtils.nullOrBlank(text) && Objects.nonNull(this.password))
 		{
 			final var start = change.getRangeStart();
 			final var end = change.getRangeEnd();
