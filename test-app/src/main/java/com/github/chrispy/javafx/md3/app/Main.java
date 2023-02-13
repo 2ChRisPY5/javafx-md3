@@ -28,11 +28,17 @@ public class Main extends Application
 	public void start(final Stage primaryStage) throws Exception
 	{
 		final var box = new VBox(8D,
+			new MdIcon("search", 24),
 			new MdInput("Plain text"),
 			new MdInput("Number", Input.NUMBER),
-			new MdInput("Password", Input.PASSWORD),
-			new MdIcon("search"));
+			new MdInput("Password", Input.PASSWORD));
 		box.setStyle("-fx-background-color: #ffffff;");
+
+		// pre / suffix
+		final var preSuffix = new MdInput("Pre & Suffix");
+		preSuffix.setPrefix("+49");
+		preSuffix.setSuffix(new MdIcon("call", 22));
+		box.getChildren().add(preSuffix);
 
 		primaryStage.setScene(new Scene(box, 200D, 200D));
 		primaryStage.show();

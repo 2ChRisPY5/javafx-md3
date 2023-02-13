@@ -20,7 +20,7 @@
 	-fx-font-size: 14px;
 }
 
-.label:not-empty:focus {
+.label:not-empty:focused {
 	-fx-text-fill: #ed872d;
 }
 
@@ -39,7 +39,7 @@
 	-fx-border-color: #626262;
 }
 
-.md-container.fill:focus {
+.md-container.fill:focused {
 	-fx-background-color: #dcdcdc;
 	-fx-border-color: #ed872d;
 	-fx-border-width: 0 0 2px 0;

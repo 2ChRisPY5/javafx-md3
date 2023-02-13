@@ -4,4 +4,5 @@ javafx {
 
 dependencies {
 	api project(':base')
+	api project(':icon')
 }

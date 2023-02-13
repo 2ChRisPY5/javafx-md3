@@ -11,7 +11,7 @@ import javafx.scene.Node;
 public enum MdPseudoClass
 {
 	NOT_EMPTY,
-	FOCUS;
+	FOCUSED;
 
 	private final PseudoClass pseudo;
 

@@ -1,6 +1,7 @@
 module chrispy.javafx.md3_input
 {
 	requires transitive chrispy.javafx.md3_base;
+	requires transitive chrispy.javafx.md3_icon;
 	requires javafx.fxml;
 	requires javafx.controls;
 

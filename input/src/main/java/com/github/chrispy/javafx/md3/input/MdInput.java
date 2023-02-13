@@ -2,10 +2,12 @@ package com.github.chrispy.javafx.md3.input;
 
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.github.chrispy.javafx.md3.base.MdPseudoClass;
 import com.github.chrispy.javafx.md3.base.fn.UnsafeRunnable;
 import com.github.chrispy.javafx.md3.base.utils.StringUtils;
+import com.github.chrispy.javafx.md3.icon.MdIcon;
 import com.github.chrispy.javafx.md3.input.formatter.NumberFilter;
 import com.github.chrispy.javafx.md3.input.formatter.PasswordFilter;
 import com.github.chrispy.javafx.md3.input.types.Design;
@@ -19,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.util.converter.NumberStringConverter;
 
@@ -29,6 +32,7 @@ import javafx.util.converter.NumberStringConverter;
  */
 public class MdInput extends GridPane
 {
+	private static final String PRE_SUFFIX_STYLE = "-fx-fill: rgba(0,0,0,0.87)";
 	private static final URL FXML = MdInput.class.getResource("/md-input.fxml");
 
 	// view childs
@@ -40,6 +44,8 @@ public class MdInput extends GridPane
 	private final TranslateTransition transition = new TranslateTransition(Duration.millis(100));
 	private final Design design;
 	private final Input input;
+	private Optional<Text> prefix = Optional.empty();
+	private Optional<Text> suffix = Optional.empty();
 
 	/**
 	 * Constructor
@@ -50,9 +56,22 @@ public class MdInput extends GridPane
 	 */
 	public MdInput(@NamedArg(value = "label") final String label,
 		@NamedArg(value = "type", defaultValue = "text") final String input,
-		@NamedArg(value = "design", defaultValue = "fill") final String design)
+		@NamedArg(value = "design", defaultValue = "fill") final String design,
+		@NamedArg("iconPrefix") final String iconPrefix,
+		@NamedArg("iconSrefix") final String iconSuffix)
 	{
 		this(label, Input.valueOf(input.toUpperCase()), Design.valueOf(design.toUpperCase()));
+
+		// handle icon prefix
+		if(!StringUtils.nullOrBlank(iconPrefix))
+		{
+			setInternalPrefix(new MdIcon(iconPrefix, 22));
+		}
+		// handle icon suffix
+		if(!StringUtils.nullOrBlank(iconSuffix))
+		{
+			setInternalSuffix(new MdIcon(iconSuffix, 22));
+		}
 	}
 
 	/**
@@ -94,20 +113,66 @@ public class MdInput extends GridPane
 		loader.setController(this);
 		UnsafeRunnable.run(loader::load);
 
-		// setup stuff
-		setLabel(label);
+		// initialize stuff
+		this.label.setText(StringUtils.nullOrBlank(label) ? null : label);
 		this.transition.setNode(this.label);
 		initialize();
 	}
 
 	/**
-	 * Set the text for the label. Blank/empty string will be set to null.
+	 * Set a text prefix for this input.
 	 *
-	 * @param text the string value or null
+	 * @param text the text to show
 	 */
-	public void setLabel(final String text)
+	public void setPrefix(final String text)
 	{
-		this.label.setText(StringUtils.nullOrBlank(text) ? null : text);
+		if(StringUtils.nullOrBlank(text))
+		{
+			setInternalPrefix(null);
+			return;
+		}
+
+		final var txt = new Text(text);
+		txt.setStyle(PRE_SUFFIX_STYLE);
+		setInternalPrefix(txt);
+	}
+
+	/**
+	 * Set an icon prefix for this input.
+	 *
+	 * @param icon the {@link MdIcon}
+	 */
+	public void setPrefx(final MdIcon icon)
+	{
+		setInternalPrefix(icon);
+	}
+
+	/**
+	 * Set a text suffix for this input.
+	 *
+	 * @param text the text to show
+	 */
+	public void setSuffix(final String text)
+	{
+		if(StringUtils.nullOrBlank(text))
+		{
+			setInternalSuffix(null);
+			return;
+		}
+
+		final var txt = new Text(text);
+		txt.setStyle(PRE_SUFFIX_STYLE);
+		setInternalSuffix(txt);
+	}
+
+	/**
+	 * Set an icon suffix for this input.
+	 *
+	 * @param icon the {@link MdIcon}
+	 */
+	public void setSuffix(final MdIcon icon)
+	{
+		setInternalSuffix(icon);
 	}
 
 	/**
@@ -185,6 +250,36 @@ public class MdInput extends GridPane
 	// ========================= internal ==================== //
 
 	/**
+	 * Set the prefix text for this input. Necessary stylings are also applied.
+	 *
+	 * @param prefix the {@link Text} or null
+	 */
+	private void setInternalPrefix(final Text prefix)
+	{
+		// remove old
+		this.prefix.ifPresent(getChildren()::remove);
+
+		// add new
+		this.prefix = Optional.ofNullable(prefix);
+		this.prefix.ifPresent(pf -> add(pf, 0, 0, 1, REMAINING));
+	}
+
+	/**
+	 * Set the suffix for this input. Necessary stylings are also applied.
+	 *
+	 * @param suffix the {@link Text} or null
+	 */
+	private void setInternalSuffix(final Text suffix)
+	{
+		// remove old
+		this.suffix.ifPresent(getChildren()::remove);
+
+		// add new
+		this.suffix = Optional.ofNullable(suffix);
+		this.suffix.ifPresent(sf -> add(sf, 2, 0, 1, REMAINING));
+	}
+
+	/**
 	 * Convenient method for updating state when setting text field value.
 	 *
 	 * @param setter logic for setting the value
@@ -207,8 +302,8 @@ public class MdInput extends GridPane
 		// register focus changed
 		this.textField.focusedProperty().addListener((obs, old, nev) -> {
 			// change focus state
-			MdPseudoClass.FOCUS.state(this, nev);
-			MdPseudoClass.FOCUS.state(this.label, nev);
+			MdPseudoClass.FOCUSED.state(this, nev);
+			MdPseudoClass.FOCUSED.state(this.label, nev);
 
 			// move label up and mark as :focus && :not-empty
 			if(nev.booleanValue())
@@ -260,7 +355,7 @@ public class MdInput extends GridPane
 		{
 			// shift to center
 			MdPseudoClass.NOT_EMPTY.remove(this.label);
-			this.transition.setToY(14D);
+			this.transition.setToY(16D);
 		}
 		else
 		{

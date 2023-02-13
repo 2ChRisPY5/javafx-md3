@@ -15,10 +15,10 @@ import javafx.scene.text.Text;
 public class MdIcon extends Text
 {
 	private static final Properties CODE_POINTS = new Properties();
-	private static final Font FONT = Font.loadFont(MdIcon.class.getResourceAsStream("/icons.otf"), 20);
 
 	static
 	{
+		Font.loadFont(MdIcon.class.getResourceAsStream("/icons.otf"), 20);
 		try
 		{
 			CODE_POINTS.load(MdIcon.class.getResourceAsStream("/codepoints.properties"));
@@ -30,13 +30,13 @@ public class MdIcon extends Text
 	}
 
 	/**
-	 * Size = 24px; color = rgba(0, 0, 0, 0.87)
+	 * Size = 20px; color = rgba(0, 0, 0, 0.87)
 	 *
 	 * @param icon the name of the icon
 	 */
 	public MdIcon(final String icon)
 	{
-		this(icon, 24);
+		this(icon, 20);
 	}
 
 	/**
@@ -59,10 +59,10 @@ public class MdIcon extends Text
 	 */
 	public MdIcon(@NamedArg("icon") final String icon,
 		@NamedArg(value = "size", defaultValue = "20") final int size,
-		@NamedArg(value = "fill", defaultValue = "") final String fill)
+		@NamedArg(value = "fill", defaultValue = "rgba(0,0,0,0.87)") final String fill)
 	{
-		setFont(FONT);
 		setStyle(new StringBuilder(64)
+			.append("-fx-font-family: \"Material Icons Outlined Regular\";")
 			.append("-fx-font-size:").append(size).append("px;")
 			.append("-fx-fill:").append(fill).append(';')
 			.toString());
@@ -70,8 +70,6 @@ public class MdIcon extends Text
 	}
 
 	/**
-	 * Gets the correct codepoint for arbitrary name and converts it actual icon.
-	 *
 	 * @param name the arbitrary name
 	 * @return the icon in its' string representation
 	 */
