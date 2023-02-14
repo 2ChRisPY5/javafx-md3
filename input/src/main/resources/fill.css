@@ -1,0 +1,27 @@
+/* fill style */
+.md-container {
+	-fx-padding: 8px 0px 8px 0px;
+	-fx-background-color: #E7E0EC;
+	-fx-background-radius: 4px 4px 0px 0px;
+	-fx-border-style: solid;
+	-fx-border-width: 0 0 1px 0;
+	-fx-border-color: #49454E;
+}
+
+.md-container:hover {
+	-fx-background-color: derive(#E7E0EC, -8%);
+	-fx-border-color: #1C1B1F;
+}
+
+.md-container:focused {
+	-fx-border-color: #ed872d;
+	-fx-border-width: 0 0 2px 0;
+}
+
+/* text input */
+.text-input {
+	-fx-padding: 16px 16px 0 16px;
+	-fx-pref-height: 40px;
+	-fx-min-height: -fx-pref-height;
+	-fx-max-height: -fx-pref-height;
+}

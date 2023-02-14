@@ -17,10 +17,11 @@ import javafx.animation.TranslateTransition;
 import javafx.beans.NamedArg;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.util.converter.NumberStringConverter;
@@ -30,9 +31,11 @@ import javafx.util.converter.NumberStringConverter;
  *
  * @author 2ChRisPY5
  */
-public class MdInput extends GridPane
+public class MdInput extends HBox
 {
-	private static final String PRE_SUFFIX_STYLE = "-fx-fill: rgba(0,0,0,0.87)";
+	private static final Insets PREFIX_INSETS = new Insets(0D, 0D, 0D, 12D);
+	private static final Insets SUFFIX_INSETS = new Insets(0D, 12D, 0D, 0D);
+	private static final String PRE_SUFFIX_STYLE = "-fx-fill: #49454E;";
 	private static final URL FXML = MdInput.class.getResource("/md-input.fxml");
 
 	// view childs
@@ -65,12 +68,12 @@ public class MdInput extends GridPane
 		// handle icon prefix
 		if(!StringUtils.nullOrBlank(iconPrefix))
 		{
-			setInternalPrefix(new MdIcon(iconPrefix, 22));
+			setInternalPrefix(new MdIcon(iconPrefix, 24));
 		}
 		// handle icon suffix
 		if(!StringUtils.nullOrBlank(iconSuffix))
 		{
-			setInternalSuffix(new MdIcon(iconSuffix, 22));
+			setInternalSuffix(new MdIcon(iconSuffix, 24));
 		}
 	}
 
@@ -261,7 +264,10 @@ public class MdInput extends GridPane
 
 		// add new
 		this.prefix = Optional.ofNullable(prefix);
-		this.prefix.ifPresent(pf -> add(pf, 0, 0, 1, REMAINING));
+		this.prefix.ifPresent(pf -> {
+			HBox.setMargin(pf, PREFIX_INSETS);
+			getChildren().add(0, pf);
+		});
 	}
 
 	/**
@@ -276,7 +282,10 @@ public class MdInput extends GridPane
 
 		// add new
 		this.suffix = Optional.ofNullable(suffix);
-		this.suffix.ifPresent(sf -> add(sf, 2, 0, 1, REMAINING));
+		this.suffix.ifPresent(sf -> {
+			HBox.setMargin(sf, SUFFIX_INSETS);
+			getChildren().add(sf);
+		});
 	}
 
 	/**
@@ -355,7 +364,7 @@ public class MdInput extends GridPane
 		{
 			// shift to center
 			MdPseudoClass.NOT_EMPTY.remove(this.label);
-			this.transition.setToY(16D);
+			this.transition.setToY(8D);
 		}
 		else
 		{

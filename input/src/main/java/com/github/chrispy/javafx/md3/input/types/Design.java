@@ -1,6 +1,7 @@
 package com.github.chrispy.javafx.md3.input.types;
 
 import javafx.scene.Node;
+import javafx.scene.Parent;
 
 /**
  * Possible design types for input.
@@ -17,8 +18,8 @@ public enum Design
 	 *
 	 * @param node the {@link Node}
 	 */
-	public void applyStyle(final Node node)
+	public void applyStyle(final Parent node)
 	{
-		node.getStyleClass().add(this.name().toLowerCase());
+		node.getStylesheets().add(name().toLowerCase() + ".css");
 	}
 }

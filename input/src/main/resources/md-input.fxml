@@ -1,36 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 
-<fx:root minHeight="-Infinity" prefHeight="56.0" stylesheets="@md-input.css" type="GridPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
-  <columnConstraints>
-    <ColumnConstraints />
-    <ColumnConstraints hgrow="ALWAYS" />
-      <ColumnConstraints />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints maxHeight="19.0" />
-    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="37.0" />
-  </rowConstraints>
+<fx:root alignment="CENTER_LEFT" stylesheets="@md-input.css" type="HBox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <styleClass>
       <String fx:value="md-container" />
    </styleClass>
    <children>
-      <Label fx:id="label" translateY="16.0" GridPane.columnIndex="1">
-         <GridPane.margin>
-            <Insets left="10.0" top="6.0" />
-         </GridPane.margin>
-      </Label>
-      <TextField fx:id="textField" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <GridPane.margin>
-            <Insets bottom="4.0" />
-         </GridPane.margin>
-      </TextField>
+      <Pane HBox.hgrow="ALWAYS">
+         <children>
+            <Label fx:id="label" translateY="8.0" />
+            <TextField fx:id="textField" />
+         </children>
+      </Pane>
    </children>
 </fx:root>

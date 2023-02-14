@@ -14,6 +14,7 @@ import javafx.scene.text.Text;
  */
 public class MdIcon extends Text
 {
+	private static final String COLOR = "#49454E";
 	private static final Properties CODE_POINTS = new Properties();
 
 	static
@@ -47,7 +48,7 @@ public class MdIcon extends Text
 	 */
 	public MdIcon(final String icon, final int size)
 	{
-		this(icon, size, "rgba(0,0,0,0.87)");
+		this(icon, size, COLOR);
 	}
 
 	/**
@@ -58,11 +59,11 @@ public class MdIcon extends Text
 	 * @param fill the color of the icon (can be any valid CSS expression)
 	 */
 	public MdIcon(@NamedArg("icon") final String icon,
-		@NamedArg(value = "size", defaultValue = "20") final int size,
-		@NamedArg(value = "fill", defaultValue = "rgba(0,0,0,0.87)") final String fill)
+		@NamedArg(value = "size", defaultValue = "24") final int size,
+		@NamedArg(value = "fill", defaultValue = COLOR) final String fill)
 	{
-		setStyle(new StringBuilder(64)
-			.append("-fx-font-family: \"Material Icons Outlined Regular\";")
+		setStyle(new StringBuilder(128)
+			.append("-fx-font-family:\"Material Icons Outlined Regular\";")
 			.append("-fx-font-size:").append(size).append("px;")
 			.append("-fx-fill:").append(fill).append(';')
 			.toString());
