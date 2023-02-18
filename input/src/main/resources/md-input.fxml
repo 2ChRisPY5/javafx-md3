@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<fx:root alignment="CENTER_LEFT" stylesheets="@md-input.css" type="HBox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
-   <styleClass>
-      <String fx:value="md-container" />
-   </styleClass>
+
+<fx:root stylesheets="@md-input.css" type="Pane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane HBox.hgrow="ALWAYS">
+      <HBox fx:id="inputBox" alignment="CENTER_LEFT" styleClass="md-container">
          <children>
-            <Label fx:id="label" translateY="8.0" />
-            <TextField fx:id="textField" />
+            <TextField fx:id="textField" HBox.hgrow="ALWAYS" />
          </children>
-      </Pane>
+      </HBox>
+	  <Label fx:id="label" />
    </children>
 </fx:root>

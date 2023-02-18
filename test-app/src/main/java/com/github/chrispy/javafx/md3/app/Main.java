@@ -1,8 +1,9 @@
 package com.github.chrispy.javafx.md3.app;
 
 import com.github.chrispy.javafx.md3.icon.MdIcon;
+import com.github.chrispy.javafx.md3.input.Design;
+import com.github.chrispy.javafx.md3.input.Input;
 import com.github.chrispy.javafx.md3.input.MdInput;
-import com.github.chrispy.javafx.md3.input.types.Input;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -31,7 +32,8 @@ public class Main extends Application
 			new MdIcon("search", 24),
 			new MdInput("Plain text"),
 			new MdInput("Number", Input.NUMBER),
-			new MdInput("Password", Input.PASSWORD));
+			new MdInput("Password", Input.PASSWORD),
+			new MdInput("Outline", Input.TEXT, Design.OUTLINE));
 		box.setStyle("-fx-background-color: #ffffff;");
 
 		// pre / suffix

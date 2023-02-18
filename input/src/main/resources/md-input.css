@@ -11,13 +11,13 @@
 	-fx-background-color: transparent;
 	-fx-background-insets: 0;
 	-fx-background-radius: 0;
+	-fx-padding: 0px 16px 0 16px;
 	-fx-text-fill: #1C1B1F;
 }
 
 /* label */
 .label {
 	-fx-text-fill: #49454E;
-	-fx-padding: 0px 16px 0 16px;
 }
 
 .label:not-empty {

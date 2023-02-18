@@ -10,20 +10,20 @@ import com.github.chrispy.javafx.md3.base.utils.StringUtils;
 import com.github.chrispy.javafx.md3.icon.MdIcon;
 import com.github.chrispy.javafx.md3.input.formatter.NumberFilter;
 import com.github.chrispy.javafx.md3.input.formatter.PasswordFilter;
-import com.github.chrispy.javafx.md3.input.types.Design;
-import com.github.chrispy.javafx.md3.input.types.Input;
 
-import javafx.animation.TranslateTransition;
 import javafx.beans.NamedArg;
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.Skin;
+import javafx.scene.control.Skinnable;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 import javafx.util.converter.NumberStringConverter;
 
 /**
@@ -31,7 +31,7 @@ import javafx.util.converter.NumberStringConverter;
  *
  * @author 2ChRisPY5
  */
-public class MdInput extends HBox
+public class MdInput extends Pane implements Skinnable
 {
 	private static final Insets PREFIX_INSETS = new Insets(0D, 0D, 0D, 12D);
 	private static final Insets SUFFIX_INSETS = new Insets(0D, 12D, 0D, 0D);
@@ -40,15 +40,18 @@ public class MdInput extends HBox
 
 	// view childs
 	@FXML
+	private HBox inputBox;
+	@FXML
 	private TextField textField;
 	@FXML
 	private Label label;
 
-	private final TranslateTransition transition = new TranslateTransition(Duration.millis(100));
-	private final Design design;
 	private final Input input;
 	private Optional<Text> prefix = Optional.empty();
 	private Optional<Text> suffix = Optional.empty();
+
+	// skin
+	private final SkinProperty skin;
 
 	/**
 	 * Constructor
@@ -107,19 +110,46 @@ public class MdInput extends HBox
 	 */
 	public MdInput(final String label, final Input input, final Design design)
 	{
-		this.design = design;
-		this.input = input;
-
 		// load fxml
 		final var loader = new FXMLLoader(FXML);
 		loader.setRoot(this);
 		loader.setController(this);
 		UnsafeRunnable.run(loader::load);
 
+		this.input = input;
+		this.skin = new SkinProperty(design.skin.apply(this), design.name());
+
 		// initialize stuff
 		this.label.setText(StringUtils.nullOrBlank(label) ? null : label);
-		this.transition.setNode(this.label);
 		initialize();
+	}
+
+	// ================= SKIN ================= //
+	/**
+	 * @see Skinnable#skinProperty()
+	 */
+	@Override
+	public ObjectProperty<Skin<?>> skinProperty()
+	{
+		return this.skin;
+	}
+
+	/**
+	 * @see Skinnable#setSkin(Skin)
+	 */
+	@Override
+	public void setSkin(final Skin<?> value)
+	{
+		this.skin.set(value);
+	}
+
+	/**
+	 * @see Skinnable#getSkin()
+	 */
+	@Override
+	public Skin<?> getSkin()
+	{
+		return this.skin.get();
 	}
 
 	/**
@@ -250,7 +280,22 @@ public class MdInput extends HBox
 		};
 	}
 
-	// ========================= internal ==================== //
+	// ========================= INTERNAL ==================== //
+	/**
+	 * Expose the internal text field of this input.
+	 */
+	TextField textField()
+	{
+		return this.textField;
+	}
+
+	/**
+	 * Expose the internal label of this input.
+	 */
+	Label label()
+	{
+		return this.label;
+	}
 
 	/**
 	 * Set the prefix text for this input. Necessary stylings are also applied.
@@ -260,13 +305,13 @@ public class MdInput extends HBox
 	private void setInternalPrefix(final Text prefix)
 	{
 		// remove old
-		this.prefix.ifPresent(getChildren()::remove);
+		this.prefix.ifPresent(this.inputBox.getChildren()::remove);
 
 		// add new
 		this.prefix = Optional.ofNullable(prefix);
 		this.prefix.ifPresent(pf -> {
 			HBox.setMargin(pf, PREFIX_INSETS);
-			getChildren().add(0, pf);
+			this.inputBox.getChildren().add(0, pf);
 		});
 	}
 
@@ -278,13 +323,13 @@ public class MdInput extends HBox
 	private void setInternalSuffix(final Text suffix)
 	{
 		// remove old
-		this.suffix.ifPresent(getChildren()::remove);
+		this.suffix.ifPresent(this.inputBox.getChildren()::remove);
 
 		// add new
 		this.suffix = Optional.ofNullable(suffix);
 		this.suffix.ifPresent(sf -> {
 			HBox.setMargin(sf, SUFFIX_INSETS);
-			getChildren().add(sf);
+			this.inputBox.getChildren().add(sf);
 		});
 	}
 
@@ -305,35 +350,6 @@ public class MdInput extends HBox
 	 */
 	private void initialize()
 	{
-		initDesign();
-		initTypeSpecifics();
-
-		// register focus changed
-		this.textField.focusedProperty().addListener((obs, old, nev) -> {
-			// change focus state
-			MdPseudoClass.FOCUSED.state(this, nev);
-			MdPseudoClass.FOCUSED.state(this.label, nev);
-
-			// move label up and mark as :focus && :not-empty
-			if(nev.booleanValue())
-			{
-				MdPseudoClass.NOT_EMPTY.apply(this.label);
-				this.transition.setToY(0D);
-				this.transition.play();
-			}
-			else
-			{
-				// handle not blank
-				handleNotBlank();
-			}
-		});
-	}
-
-	/**
-	 * Initialize input type specific stuff.
-	 */
-	private void initTypeSpecifics()
-	{
 		switch(this.input)
 		{
 			case PASSWORD:
@@ -348,14 +364,6 @@ public class MdInput extends HBox
 	}
 
 	/**
-	 * Initialize styling.
-	 */
-	private void initDesign()
-	{
-		this.design.applyStyle(this);
-	}
-
-	/**
 	 * Moves the label up if a text exists; else move to middle
 	 */
 	private void handleNotBlank()
@@ -364,14 +372,11 @@ public class MdInput extends HBox
 		{
 			// shift to center
 			MdPseudoClass.NOT_EMPTY.remove(this.label);
-			this.transition.setToY(8D);
 		}
 		else
 		{
 			// move up
 			MdPseudoClass.NOT_EMPTY.apply(this.label);
-			this.transition.setToY(0D);
 		}
-		this.transition.play();
 	}
 }

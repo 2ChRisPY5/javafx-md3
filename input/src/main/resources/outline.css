@@ -1,0 +1,26 @@
+/* container */
+.md-container {
+	-fx-background-color: transparent;
+	-fx-border-style: solid;
+	-fx-border-width: 1px;
+	-fx-border-color: #79747E;
+	-fx-border-radius: 4px;
+}
+
+.md-container:hover {
+	-fx-border-color: derive(#79747E, -8%);
+}
+
+.md-container:focused {
+	-fx-border-width: 2px;
+	-fx-border-color: #ed872d;
+}
+
+/* label */
+.label {
+	-fx-padding: 0px 4px 0 4px;
+}
+
+.label:not-empty {
+	-fx-background-color: #ffffff;
+}
